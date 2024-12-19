@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Keyboard Controlled Square with Reversed Scrolling Grid</title>
+    <title>Touch Controlled Square with Reversed Scrolling Grid</title>
     <style>
         body {
             margin: 0;
@@ -19,152 +19,189 @@
         canvas {
             border: 1px solid black;
         }
+
+        #joystick {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px solid #333;
+            border-radius: 50%;
+            touch-action: none; /* Prevent default gestures */
+        }
+
+        #joystick-inner {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 0, 0, 0.5);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
-<script> 
-    // Get the canvas element and set the 2D context
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    <div id="joystick">
+        <div id="joystick-inner"></div>
+    </div>
+    <script>
+        // Get the canvas element and set the 2D context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-    // Set canvas size to fill the screen
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        // Set canvas size to fill the screen
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    // Square properties
-    const square = {
-        x: canvas.width / 2,
-        y: canvas.height / 2,
-        size: 50, // Size of the player square and grid squares
-        speed: 5,
-        color: 'red'
-    };
+        // Square properties
+        const square = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            size: 50,
+            speed: 5,
+            color: 'red',
+            dx: 0,
+            dy: 0 // Direction vector for movement
+        };
 
-    // Grid offset (initially centered)
-    let gridOffsetX = 0;
-    let gridOffsetY = 0;
+        // Grid offset (initially centered)
+        let gridOffsetX = 0;
+        let gridOffsetY = 0;
 
-    // Event listener for keyboard input
-    let keys = {};
+        // Joystick elements
+        const joystick = document.getElementById('joystick');
+        const joystickInner = document.getElementById('joystick-inner');
+        let joystickActive = false;
 
-    window.addEventListener('keydown', (e) => {
-        keys[e.key] = true;
-    });
+        joystick.addEventListener('touchstart', (e) => {
+            joystickActive = true;
+            updateJoystick(e.touches[0]);
+        });
 
-    window.addEventListener('keyup', (e) => {
-        keys[e.key] = false;
-    });
+        joystick.addEventListener('touchmove', (e) => {
+            if (joystickActive) updateJoystick(e.touches[0]);
+        });
 
-    // Update the position of the square based on key input
-    function update() {
-// Player movement logic
-if (keys['w'] || keys['ArrowUp']) square.y -= square.speed;
-if (keys['a'] || keys['ArrowLeft']) square.x -= square.speed;
-if (keys['s'] || keys['ArrowDown']) square.y += square.speed;
-if (keys['d'] || keys['ArrowRight']) square.x += square.speed;
+        joystick.addEventListener('touchend', () => {
+            joystickActive = false;
+            resetJoystick();
+        });
 
-// Prevent the player from going outside the canvas
-square.x = Math.max(0, Math.min(square.x, canvas.width - square.size));
-square.y = Math.max(0, Math.min(square.y, canvas.height - square.size));
+        // Update joystick position and square direction
+        function updateJoystick(touch) {
+            const rect = joystick.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const deltaX = touch.clientX - centerX;
+            const deltaY = touch.clientY - centerY;
+            const distance = Math.min(Math.sqrt(deltaX ** 2 + deltaY ** 2), rect.width / 2);
+            const angle = Math.atan2(deltaY, deltaX);
 
-// Smoothly update grid offsets when the player reaches the canvas edges
-if (square.x <= 0) {
-    gridOffsetX += square.speed; // Move grid right when player reaches left edge
-    square.x = 0; // Prevent the square from moving out of bounds
-} else if (square.x + square.size >= canvas.width) {
-    gridOffsetX -= square.speed; // Move grid left when player reaches right edge
-    square.x = canvas.width - square.size; // Prevent the square from moving out of bounds
-}
+            // Move joystick inner circle
+            joystickInner.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
-if (square.y <= 0) {
-    gridOffsetY += square.speed; // Move grid down when player reaches top edge
-    square.y = 0; // Prevent the square from moving out of bounds
-} else if (square.y + square.size >= canvas.height) {
-    gridOffsetY -= square.speed; // Move grid up when player reaches bottom edge
-    square.y = canvas.height - square.size; // Prevent the square from moving out of bounds
-}
-}
+            // Update square direction
+            square.dx = Math.cos(angle) * (distance / (rect.width / 2));
+            square.dy = Math.sin(angle) * (distance / (rect.height / 2));
+        }
 
+        // Reset joystick to center and stop movement
+        function resetJoystick() {
+            joystickInner.style.transform = 'translate(-50%, -50%)';
+            square.dx = 0;
+            square.dy = 0;
+        }
 
-// Score and visited squares tracker
-let score = 0;
-const visitedSquares = new Set();
+        // Update the square's position based on direction
+        function update() {
+            // Update position
+            square.x += square.dx * square.speed;
+            square.y += square.dy * square.speed;
 
-// Function to calculate a unique key for each grid square
-function getSquareKey(x, y) {
-return `${Math.floor(x / (square.size * 3))},${Math.floor(y / (square.size * 3))}`;
-}
+            // Prevent the player from going outside the canvas
+            square.x = Math.max(0, Math.min(square.x, canvas.width - square.size));
+            square.y = Math.max(0, Math.min(square.y, canvas.height - square.size));
 
-// Update the drawGrid function
-function drawGrid() {
-const gridSize = square.size * 3; // Each grid square size is the same as the player square
+            // Smoothly update grid offsets when the player reaches the canvas edges
+            if (square.x <= 0) {
+                gridOffsetX += square.speed;
+                square.x = 0;
+            } else if (square.x + square.size >= canvas.width) {
+                gridOffsetX -= square.speed;
+                square.x = canvas.width - square.size;
+            }
 
-for (let x = -gridSize; x < canvas.width + gridSize; x += gridSize) {
-    for (let y = -gridSize; y < canvas.height + gridSize; y += gridSize) {
-        // Determine the checkerboard pattern
-        const isEven = (Math.floor((x + gridOffsetX) / gridSize) + Math.floor((y + gridOffsetY) / gridSize)) % 2 === 0;
-
-        // Calculate the current grid square position
-        const gridX = x + gridOffsetX % gridSize;
-        const gridY = y + gridOffsetY % gridSize;
-
-        // Check for collision with the player square
-        const isColliding =
-            square.x < gridX + gridSize &&
-            square.x + square.size > gridX &&
-            square.y < gridY + gridSize &&
-            square.y + square.size > gridY;
-
-        // Set color: green if colliding, otherwise checkerboard color
-        ctx.fillStyle = isEven ? '#ddd' : '#bbb';
-
-        // Draw the square
-        ctx.fillRect(gridX, gridY, gridSize, gridSize);
-
-        // Update score if the square is collided with and hasn't been visited
-        if (isColliding) {
-            const key = getSquareKey(gridX, gridY);
-            if (!visitedSquares.has(key)) {
-                visitedSquares.add(key); // Mark the square as visited
-                score++; // Increment the score
+            if (square.y <= 0) {
+                gridOffsetY += square.speed;
+                square.y = 0;
+            } else if (square.y + square.size >= canvas.height) {
+                gridOffsetY -= square.speed;
+                square.y = canvas.height - square.size;
             }
         }
-    }
-}
-}
 
-// Draw the score overlay
-function drawScore() {
-ctx.font = '24px Arial';
-ctx.fillStyle = 'black';
-ctx.fillText(`Score: ${score}`, 10, 30);
-}
+        // Score and visited squares tracker
+        let score = 0;
+        const visitedSquares = new Set();
 
-// Update the draw function
-function draw() {
-ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        function getSquareKey(x, y) {
+            return `${Math.floor(x / (square.size * 3))},${Math.floor(y / (square.size * 3))}`;
+        }
 
-// Draw the grid first
-drawGrid();
+        function drawGrid() {
+            const gridSize = square.size * 3;
+            for (let x = -gridSize; x < canvas.width + gridSize; x += gridSize) {
+                for (let y = -gridSize; y < canvas.height + gridSize; y += gridSize) {
+                    const isEven = (Math.floor((x + gridOffsetX) / gridSize) + Math.floor((y + gridOffsetY) / gridSize)) % 2 === 0;
+                    const gridX = x + gridOffsetX % gridSize;
+                    const gridY = y + gridOffsetY % gridSize;
 
-// Then draw the player square
-ctx.fillStyle = square.color;
-ctx.fillRect(square.x, square.y, square.size, square.size); // Draw the square
+                    const isColliding =
+                        square.x < gridX + gridSize &&
+                        square.x + square.size > gridX &&
+                        square.y < gridY + gridSize &&
+                        square.y + square.size > gridY;
 
-// Draw the score overlay
-drawScore();
-}
+                    ctx.fillStyle = isEven ? '#ddd' : '#bbb';
+                    ctx.fillRect(gridX, gridY, gridSize, gridSize);
 
+                    if (isColliding) {
+                        const key = getSquareKey(gridX, gridY);
+                        if (!visitedSquares.has(key)) {
+                            visitedSquares.add(key);
+                            score++;
+                        }
+                    }
+                }
+            }
+        }
 
-    // The game loop
-    function gameLoop() {
-        update();
-        draw();
-        requestAnimationFrame(gameLoop); // Call the game loop again
-    }
+        function drawScore() {
+            ctx.font = '24px Arial';
+            ctx.fillStyle = 'black';
+            ctx.fillText(`Score: ${score}`, 10, 30);
+        }
 
-    // Start the game loop
-    gameLoop();
-</script>
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            ctx.fillStyle = square.color;
+            ctx.fillRect(square.x, square.y, square.size, square.size);
+            drawScore();
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
 </html>
