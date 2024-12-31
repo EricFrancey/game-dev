@@ -1,3 +1,26 @@
+class Opponent {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+
+      this.vx = 0.1;
+      this.vy = 0.1;
+    }
+
+    update(){
+        this.x+=this.vx;
+        this.y+=this.vy;
+    }
+
+    draw() {
+        ctx.fillStyle = 'purple';
+        ctx.fillRect(this.x, this.y, 50, 50); // Draw the square
+    }
+}
+
+var opponent1 = new Opponent(0,0);
+   
+
 // Get the canvas element and set the 2D context
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -125,6 +148,10 @@ function draw() {
     // Then draw the player square
     ctx.fillStyle = square.color;
     ctx.fillRect(square.x, square.y, square.size, square.size); // Draw the square
+
+    // Draw opponent
+    opponent1.update();
+    opponent1.draw();
 
     // Draw the score overlay
     drawScore();
