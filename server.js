@@ -39,7 +39,9 @@ io.on('connection', (socket) => {
         console.log('Message from client: ', msg);
 
         for (var i = 0; i < allSockets.length; i++){
-            allSockets[i].emit('message', 'New message from ' + addr + " - " + msg);
+            if (socket != allSockets[i]){
+                allSockets[i].emit('message', addr + " " + msg);
+            }
         }
     });
 

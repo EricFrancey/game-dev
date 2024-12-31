@@ -1,18 +1,42 @@
 const socket = io();
 socket.emit('message', "Hello from client");
 
+var opponents = {};
+function parseMsg(msg){
+    var data = msg.split(" ");
+    if (data.length != 3){
+        return(['no data','no data', 'no data']);
+    } else {
+        return(data);
+    }
+}
+socket.on('message', (msg) => {
+
+    var [id, x, y] = parseMsg(msg);
+    if (Object.hasOwn(opponents, id)){
+        opponents[id].x = parseInt(x);
+        opponents[id].y = parseInt(y);
+    } else {
+        opponents[id] = new Opponent(x,y, 'bot');
+    }
+
+});
+
 class Opponent {
-    constructor(x, y) {
+    constructor(x, y, id) {
       this.x = x;
       this.y = y;
+      this.id = id;
 
       this.vx = 0.1;
       this.vy = 0.1;
     }
 
     update(){
-        this.x+=this.vx;
-        this.y+=this.vy;
+        if (this.id == 'bot'){
+            this.x+=this.vx;
+            this.y+=this.vy;
+        }
     }
 
     draw() {
@@ -21,7 +45,8 @@ class Opponent {
     }
 }
 
-var opponent1 = new Opponent(0,0);
+var opponent1 = new Opponent(0,0, 'bot');
+opponents['bot'] = opponent1;
    
 
 // Get the canvas element and set the 2D context
@@ -152,9 +177,12 @@ function draw() {
     ctx.fillStyle = square.color;
     ctx.fillRect(square.x, square.y, square.size, square.size); // Draw the square
 
-    // Draw opponent
-    opponent1.update();
-    opponent1.draw();
+    // Draw opponents
+    for (var o = 0; o < Object.keys(opponents).length; o++){
+        var id = Object.keys(opponents)[o];
+        opponents[id].update();
+        opponents[id].draw();
+    }
 
     // Draw the score overlay
     drawScore();
