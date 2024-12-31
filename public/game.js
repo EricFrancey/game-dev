@@ -1,3 +1,6 @@
+const socket = io();
+socket.emit('message', "Hello from client");
+
 class Opponent {
     constructor(x, y) {
       this.x = x;
@@ -160,6 +163,7 @@ function draw() {
 
 // The game loop
 function gameLoop() {
+    socket.emit('message', square.x.toString() + " " + square.y.toString());
     update();
     draw();
     requestAnimationFrame(gameLoop); // Call the game loop again
