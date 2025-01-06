@@ -30,18 +30,27 @@ class Opponent {
 
       this.vx = 0.1;
       this.vy = 0.1;
+
+      this.number = 0;
     }
 
-    update(){
+    update(number){
         if (this.id == 'bot'){
             this.x+=this.vx;
             this.y+=this.vy;
         }
+
+        this.number = number;
     }
 
     draw() {
         ctx.fillStyle = 'purple';
         ctx.fillRect(this.x, this.y, 50, 50); // Draw the square
+        if (this.id == 'bot'){
+            ctx.fillText(`Bot ${this.number}`, this.x, this.y);
+        } else {
+            ctx.fillText(`Player ${this.number}`, this.x, this.y);
+        }
     }
 }
 
@@ -108,6 +117,15 @@ function update() {
     } else if (square.y + square.size >= canvas.height) {
         gridOffsetY -= square.speed; // Move grid up when player reaches bottom edge
         square.y = canvas.height - square.size; // Prevent the square from moving out of bounds
+    }
+
+    // update opponents
+
+    // Draw opponents
+    for (var o = 0; o < Object.keys(opponents).length; o++){
+        var id = Object.keys(opponents)[o];
+        opponents[id].update(o+1);
+        opponents[id].draw();
     }
 }
 
@@ -180,13 +198,8 @@ function draw() {
     // Draw opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
-        opponents[id].update();
+        opponents[id].update(o+1);
         opponents[id].draw();
-        if (id == 'bot'){
-            ctx.fillText(`Bot ${o+1}`, opponents[id].x, opponents[id].y);
-        } else {
-            ctx.fillText(`Player ${o+1}`, opponents[id].x, opponents[id].y);
-        }
     }
 
     // Draw the score overlay
