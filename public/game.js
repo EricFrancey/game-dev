@@ -182,6 +182,11 @@ function draw() {
         var id = Object.keys(opponents)[o];
         opponents[id].update();
         opponents[id].draw();
+        if (id == 'bot'){
+            ctx.fillText(`Bot ${o+1}`, opponents[id].x, opponents[id].y);
+        } else {
+            ctx.fillText(`Player ${o+1}`, opponents[id].x, opponents[id].y);
+        }
     }
 
     // Draw the score overlay
