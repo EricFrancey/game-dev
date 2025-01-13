@@ -1,15 +1,6 @@
 const socket = io();
-socket.emit('message', "Hello from client");
 
 var opponents = {};
-function parseMsg(msg){
-    var data = msg.split(" ");
-    if (data.length != 3){
-        return(['no data','no data', 'no data']);
-    } else {
-        return(data);
-    }
-}
 socket.on('message', (msg) => {
 
     var [id, x, y] = parseMsg(msg);
@@ -21,41 +12,6 @@ socket.on('message', (msg) => {
     }
 
 });
-
-class Opponent {
-    constructor(x, y, id) {
-      this.x = x;
-      this.y = y;
-      this.id = id;
-
-      this.vx = 0.1;
-      this.vy = 0.1;
-
-      this.number = 0;
-    }
-
-    update(number){
-        if (this.id == 'bot'){
-            this.x+=this.vx;
-            this.y+=this.vy;
-        }
-
-        this.number = number;
-    }
-
-    draw() {
-        ctx.fillStyle = 'purple';
-        ctx.fillRect(this.x, this.y, 50, 50); // Draw the square
-        if (this.id == 'bot'){
-            ctx.fillText(`Bot ${this.number}`, this.x, this.y);
-        } else {
-            ctx.fillText(`Player ${this.number}`, this.x, this.y);
-        }
-    }
-}
-
-var opponent1 = new Opponent(0,0, 'bot');
-opponents['bot'] = opponent1;
    
 
 // Get the canvas element and set the 2D context
@@ -66,14 +22,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Square properties
-const square = {
-    x: canvas.width / 2,
-    y: canvas.height / 2,
-    size: 50, // Size of the player square and grid squares
-    speed: 5,
-    color: 'red'
-};
+square = new Square();
 
 // Grid offset (initially centered)
 let gridOffsetX = 0;
@@ -214,6 +163,11 @@ function gameLoop() {
     draw();
     requestAnimationFrame(gameLoop); // Call the game loop again
 }
+
+
+// Init game variables
+var opponent1 = new Opponent(0,0, 'bot');
+opponents['bot'] = opponent1;
 
 // Start the game loop
 gameLoop();
