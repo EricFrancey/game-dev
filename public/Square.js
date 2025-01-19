@@ -16,6 +16,10 @@ class Square {
         if (keys['s'] || keys['ArrowDown']) this.y += this.speed;
         if (keys['d'] || keys['ArrowRight']) this.x += this.speed;
 
+        // mobile
+        this.x += this.speed*joystick.dx;
+        this.y += this.speed*joystick.dy;
+
         // Prevent the player from going outside the canvas
         this.x = Math.max(0, Math.min(this.x, canvas.width - this.size));
         this.y = Math.max(0, Math.min(this.y, canvas.height - this.size));

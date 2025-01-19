@@ -15,6 +15,7 @@ var opponent1 = new Opponent(0,0, 'bot');
 opponents['bot'] = opponent1;
 square = new Square();
 grid = new Grid();
+joystick = new Joystick();
 
 // Event listener for keyboard input
 let keys = {};
