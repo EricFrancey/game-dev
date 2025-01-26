@@ -19,6 +19,17 @@ class Square {
         // mobile
         this.x += this.speed*joystick.dx;
         this.y += this.speed*joystick.dy;
+      
+        if (keys['1']) this.color ='red';
+        if (keys['2']) this.color ='blue';
+        if (keys['3']) this.color ='green';
+        if (keys['4']) this.color ='yellow';
+        if (keys['5']) this.color ='purple';
+        if (keys['6']) this.color ='orange';
+        if (keys['7']) this.color ='magenta';
+        if (keys['8']) this.color ='cyan';
+        if (keys['9']) this.color ='white';
+        if (keys['10']) this.color ='gray';
 
         // Prevent the player from going outside the canvas
         this.x = Math.max(0, Math.min(this.x, canvas.width - this.size));
