@@ -9,9 +9,19 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+
+
+const colors = ['green', 'blue', 'red'];
+
+// Get a random index from the array
+const randomIndex = Math.floor(Math.random() * colors.length);
+
+// Select the random item
+const randomColor = colors[randomIndex];
+
 // Init game variables
 var opponents = {};
-var opponent1 = new Opponent(0,0, 'bot');
+var opponent1 = new Opponent(0,0, 'bot', randomColor);
 opponents['bot'] = opponent1;
 square = new Square();
 grid = new Grid();
@@ -30,12 +40,13 @@ window.addEventListener('keyup', (e) => {
 // communications
 socket.on('message', (msg) => {
 
-    var [id, x, y] = parseMsg(msg);
+    var [id, x, y, color] = parseMsg(msg);
     if (Object.hasOwn(opponents, id)){
         opponents[id].x = parseInt(x);
         opponents[id].y = parseInt(y);
+        opponents[id].color = color;
     } else {
-        opponents[id] = new Opponent(x,y, 'bot');
+        opponents[id] = new Opponent(x,y, 'bot', color);
     }
 
 });
@@ -73,9 +84,17 @@ function draw() {
     ctx.fillText(`Score: ${grid.score}`, 10, 30);
 }
 
+// function msg() {
+
+//     setInterval(() => {
+//         socket.emit('message', square.x.toString() + " " + square.y.toString());
+//     }, 5000);
+// }
+
+// msg()
 // The game loop
 function gameLoop() {
-    socket.emit('message', square.x.toString() + " " + square.y.toString());
+    socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
     update();
     draw();
     requestAnimationFrame(gameLoop); // Call the game loop again
