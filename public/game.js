@@ -9,8 +9,6 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-
-
 const colors = ['green', 'blue', 'red'];
 const randomIndex = Math.floor(Math.random() * colors.length);
 const randomColor = colors[randomIndex];
