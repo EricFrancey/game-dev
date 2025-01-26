@@ -16,6 +16,10 @@ class Square {
         if (keys['s'] || keys['ArrowDown']) this.y += this.speed;
         if (keys['d'] || keys['ArrowRight']) this.x += this.speed;
 
+        // mobile
+        this.x += this.speed*joystick.dx;
+        this.y += this.speed*joystick.dy;
+      
         if (keys['1']) this.color ='red';
         if (keys['2']) this.color ='blue';
         if (keys['3']) this.color ='green';
