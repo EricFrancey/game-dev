@@ -12,11 +12,7 @@ canvas.height = window.innerHeight;
 
 
 const colors = ['green', 'blue', 'red'];
-
-// Get a random index from the array
 const randomIndex = Math.floor(Math.random() * colors.length);
-
-// Select the random item
 const randomColor = colors[randomIndex];
 
 // Init game variables
@@ -84,14 +80,6 @@ function draw() {
     ctx.fillText(`Score: ${grid.score}`, 10, 30);
 }
 
-// function msg() {
-
-//     setInterval(() => {
-//         socket.emit('message', square.x.toString() + " " + square.y.toString());
-//     }, 5000);
-// }
-
-// msg()
 // The game loop
 function gameLoop() {
     socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
