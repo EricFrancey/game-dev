@@ -17,10 +17,10 @@ var opponent3 = new Opponent(0,0, 'bot', 'red');
 opponents['bot1'] = opponent1;
 opponents['bot2'] = opponent2;
 opponents['bot3'] = opponent3;
-square = new Square();
-grid = new Grid();
+square = new Square(canvas);
+grid = new Grid(canvas);
 joystick = new Joystick();
-viewport = new Viewport();
+viewport = new Viewport(canvas);
 
 // Event listener for keyboard input
 let keys = {};
@@ -50,7 +50,7 @@ socket.on('message', (msg) => {
 // update game objects
 function update() {
 
-    square.update();
+    square.update(keys);
     grid.update(square);
     viewport.moveWithSquare(square)
 
@@ -66,13 +66,13 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
     // Draw the grid first
-    //grid.draw(square);
-    square.draw(viewport);
+    //grid.draw(ctx, square);
+    square.draw(ctx, viewport);
 
     // Draw opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
-        opponents[id].draw(viewport);
+        opponents[id].draw(ctx, viewport);
     }
 
     // Draw the score overlay

@@ -21,7 +21,7 @@ class Opponent {
         this.number = number;
     }
 
-    draw(viewport) {
+    draw(ctx, viewport) {
 
         if (viewport.contains(this.x,this.y)){
 

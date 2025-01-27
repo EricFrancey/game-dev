@@ -1,9 +1,11 @@
 // Background Grid
 class Grid {
-    constructor(){
+    constructor(canvas){
         this.gridOffsetX = 0;
         this.gridOffsetY = 0;
         this.gridSize = 150;
+        this.width = canvas.width;
+        this.height = canvas.height;
 
         this.score = 0;
         this.visitedSquares = new Set();
@@ -17,21 +19,21 @@ class Grid {
         // Smoothly update grid offsets when the player reaches the canvas edges
         if (square.x <= 0) {
             this.gridOffsetX += square.speed; // Move grid right when player reaches left edge
-        } else if (square.x + square.size >= canvas.width) {
+        } else if (square.x + square.size >= this.width) {
             this.gridOffsetX -= square.speed; // Move grid left when player reaches right edge
         }
     
         if (square.y <= 0) {
             this.gridOffsetY += square.speed; // Move grid down when player reaches top edge
-        } else if (square.y + square.size >= canvas.height) {
+        } else if (square.y + square.size >= this.height) {
             this.gridOffsetY -= square.speed; // Move grid up when player reaches bottom edge
         }
         
     }
 
-    draw(square){
-        for (let x = -this.gridSize; x < canvas.width + this.gridSize; x += this.gridSize) {
-            for (let y = -this.gridSize; y < canvas.height + this.gridSize; y += this.gridSize) {
+    draw(ctx, square){
+        for (let x = -this.gridSize; x < this.width + this.gridSize; x += this.gridSize) {
+            for (let y = -this.gridSize; y < this.height + this.gridSize; y += this.gridSize) {
                 // Determine the checkerboard pattern
                 const isEven = (Math.floor((x + this.gridOffsetX) / this.gridSize) + Math.floor((y + this.gridOffsetY) / this.gridSize)) % 2 === 0;
     

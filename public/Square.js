@@ -1,6 +1,6 @@
 // Square properties
 class Square {
-    constructor(){
+    constructor(canvas){
         this.x = canvas.width / 2;
         this.y = canvas.height / 2;
         this.size = 50; // Size of the player square and grid squares
@@ -10,7 +10,7 @@ class Square {
         this.bufferzone = 50;
     }
 
-    update(){
+    update(keys){
 
         // Player movement logic
         this.w = (keys['w'] || keys['ArrowUp']) ? 1 : 0 
@@ -37,7 +37,7 @@ class Square {
 
     }
 
-    draw(viewport){
+    draw(ctx, viewport){
         ctx.fillStyle = this.color;
         const [x,y] = viewport.toCanvas(this.x,this.y); 
         ctx.fillRect(x, y, this.size, this.size); // Draw the square

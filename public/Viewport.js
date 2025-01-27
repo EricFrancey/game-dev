@@ -1,5 +1,5 @@
 class Viewport{
-    constructor(){
+    constructor(canvas){
         this.width = canvas.width;
         this.height = canvas.height;
         this.top = 0;
@@ -9,12 +9,12 @@ class Viewport{
 
     moveWithSquare(square){
         // Smoothly update grid offsets when the player reaches the canvas edges
-        if ((square.x <= this.left + this.bufferzone) || (square.x + square.size >= this.left + canvas.width - this.bufferzone)) {
+        if ((square.x <= this.left + this.bufferzone) || (square.x + square.size >= this.left + this.width - this.bufferzone)) {
             this.left += square.vx;
         }
 
     
-        if ((square.y <= this.top + this.bufferzone) || (square.y + square.size >= this.top + canvas.height - this.bufferzone)) {
+        if ((square.y <= this.top + this.bufferzone) || (square.y + square.size >= this.top + this.height - this.bufferzone)) {
            this.top += square.vy;
         }
         
