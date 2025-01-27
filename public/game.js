@@ -9,17 +9,18 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const colors = ['green', 'blue', 'red'];
-const randomIndex = Math.floor(Math.random() * colors.length);
-const randomColor = colors[randomIndex];
-
 // Init game variables
 var opponents = {};
-var opponent1 = new Opponent(0,0, 'bot', randomColor);
-opponents['bot'] = opponent1;
+var opponent1 = new Opponent(0,0, 'bot', 'green');
+var opponent2 = new Opponent(0,0, 'bot', 'blue');
+var opponent3 = new Opponent(0,0, 'bot', 'red');
+opponents['bot1'] = opponent1;
+opponents['bot2'] = opponent2;
+opponents['bot3'] = opponent3;
 square = new Square();
 grid = new Grid();
 joystick = new Joystick();
+viewport = new Viewport();
 
 // Event listener for keyboard input
 let keys = {};
@@ -41,7 +42,7 @@ socket.on('message', (msg) => {
         opponents[id].y = parseInt(y);
         opponents[id].color = color;
     } else {
-        opponents[id] = new Opponent(x,y, 'bot', color);
+        opponents[id] = new Opponent(x,y, 'player', color);
     }
 
 });
@@ -51,6 +52,7 @@ function update() {
 
     square.update();
     grid.update(square);
+    viewport.moveWithSquare(square)
 
     // update opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
@@ -64,19 +66,29 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
     // Draw the grid first
-    grid.draw(square);
-    square.draw();
+    //grid.draw(square);
+    square.draw(viewport);
 
     // Draw opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
-        opponents[id].draw();
+        opponents[id].draw(viewport);
     }
 
     // Draw the score overlay
     ctx.font = '24px Arial';
     ctx.fillStyle = 'black';
     ctx.fillText(`Score: ${grid.score}`, 10, 30);
+
+    // draw coordinates
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`X: ${square.x}   Y: ${square.y}`, 10, 60);
+
+    // draw viewport coords
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
 }
 
 // The game loop

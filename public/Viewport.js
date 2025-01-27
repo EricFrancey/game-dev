@@ -4,16 +4,26 @@ class Viewport{
         this.height = canvas.height;
         this.top = 0;
         this.left = 0;
+        this.bufferzone = 50;
     }
 
     moveWithSquare(square){
-        this.top += square.vy;
-        this.left += square.vx;
+        // Smoothly update grid offsets when the player reaches the canvas edges
+        if ((square.x <= this.left + this.bufferzone) || (square.x + square.size >= this.left + canvas.width - this.bufferzone)) {
+            this.left += square.vx;
+        }
+
+    
+        if ((square.y <= this.top + this.bufferzone) || (square.y + square.size >= this.top + canvas.height - this.bufferzone)) {
+           this.top += square.vy;
+        }
+        
+        
     }
 
-    viewPortToCanvas(x,y){
+    toCanvas(x,y){
         // takes a position and gets canvas coordinates
-        return(x - this.left, y - this.top);
+        return([x - this.left, y - this.top]);
     }
 
     contains(x,y){
