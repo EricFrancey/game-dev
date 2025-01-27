@@ -5,8 +5,9 @@ class Opponent {
       this.id = id;
       this.color = color;
 
-      this.vx = 0.1;
-      this.vy = 0.1;
+      this.rnd = [0.0, 0.1, 0.2];
+      this.vx = this.rnd[Math.floor(Math.random() * 3)];
+      this.vy = this.rnd[Math.floor(Math.random() * 3)];
 
       this.number = 0;
     }
@@ -20,13 +21,20 @@ class Opponent {
         this.number = number;
     }
 
-    draw() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, 50, 50); // Draw the square
-        if (this.id == 'bot'){
-            ctx.fillText(`Bot ${this.number}`, this.x, this.y);
-        } else {
-            ctx.fillText(`Player ${this.number}`, this.x, this.y);
+    draw(viewport) {
+
+        if (viewport.contains(this.x,this.y)){
+
+            const [x,y] = viewport.toCanvas(this.x,this.y);
+
+            ctx.fillStyle = this.color;
+            ctx.fillRect(x, y, 50, 50); // Draw the square
+            if (this.id == 'bot'){
+                ctx.fillText(`Bot ${this.number}`, x, y);
+            } else {
+                ctx.fillText(`Player ${this.number}`, x, y);
+            }
+
         }
     }
 }
