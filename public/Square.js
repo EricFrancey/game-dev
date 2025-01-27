@@ -18,15 +18,11 @@ class Square {
         this.s = (keys['s'] || keys['ArrowDown']) ? 1: 0
         this.d = (keys['d'] || keys['ArrowRight'])? 1:0
 
-        this.vx = this.speed*(this.d - this.a);
-        this.vy = this.speed*(this.s - this.w);
+        this.vx = this.speed*(this.d - this.a + joystick.dx);
+        this.vy = this.speed*(this.s - this.w + joystick.dy);
 
         this.x += this.vx;
         this.y += this.vy;
-
-        // mobile
-        this.x += this.speed*joystick.dx;
-        this.y += this.speed*joystick.dy;
       
         if (keys['1']) this.color ='red';
         if (keys['2']) this.color ='blue';
