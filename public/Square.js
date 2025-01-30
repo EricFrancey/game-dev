@@ -40,6 +40,6 @@ class Square {
     draw(ctx, viewport){
         ctx.fillStyle = this.color;
         const [x,y] = viewport.toCanvas(this.x,this.y); 
-        ctx.fillRect(x, y, this.size, this.size); // Draw the square
+        ctx.fillRect(x, y, this.size/viewport.scaleFactor, this.size/viewport.scaleFactor); // Draw the square
     }
 };

@@ -5,7 +5,7 @@ class Opponent {
       this.id = id;
       this.color = color;
 
-      this.rnd = [0.0, 0.1, 0.2];
+      this.rnd = [0.0, 0.2, 0.4];
       this.vx = this.rnd[Math.floor(Math.random() * 3)];
       this.vy = this.rnd[Math.floor(Math.random() * 3)];
 
@@ -28,7 +28,7 @@ class Opponent {
             const [x,y] = viewport.toCanvas(this.x,this.y);
 
             ctx.fillStyle = this.color;
-            ctx.fillRect(x, y, 50, 50); // Draw the square
+            ctx.fillRect(x, y, 50/viewport.scaleFactor, 50/viewport.scaleFactor); // Draw the square
             if (this.id == 'bot'){
                 ctx.fillText(`Bot ${this.number}`, x, y);
             } else {
