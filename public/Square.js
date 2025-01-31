@@ -37,6 +37,10 @@ class Square {
 
     }
 
+    contains(x,y){
+        return(x > this.x && x < this.x + this.size && y > this.y && y < this.y + this.size);
+    }
+
     draw(ctx, viewport){
         ctx.fillStyle = this.color;
         const [x,y] = viewport.toCanvas(this.x,this.y); 
