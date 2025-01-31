@@ -5,12 +5,14 @@ class Opponent {
       this.id = id;
       this.color = color;
 
-      this.rnd = [0.0, 0.1, 0.2, 0.4, 0.8, 1.6, 3.2];
-      this.vx = this.rnd[Math.floor(Math.random() * 3)];
-      this.vy = this.rnd[Math.floor(Math.random() * 3)];
+      //this.rnd = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8, -0.1, -0.2, -0.4, -0.8, -1.6, -3.2, -6.4, -12.8];
+      this.rnd = [0.1, 0.2, 0.4, 0.8, -0.1, -0.2, -0.4, -0.8];
+      //this.rnd = [1.6, 3.2, 6.4, 12.8, -1.6, -3.2, -6.4, -12.8];
+      this.vx = this.rnd[Math.floor(Math.random() * this.rnd.length)];
+      this.vy = this.rnd[Math.floor(Math.random() * this.rnd.length)];
 
       this.number = 0;
-      this.size = 50;
+      this.size = 150;
     }
 
     update(number){
@@ -33,7 +35,7 @@ class Opponent {
             const [x,y] = viewport.toCanvas(this.x,this.y);
 
             ctx.fillStyle = this.color;
-            ctx.fillRect(x, y, 50/viewport.scaleFactor, 50/viewport.scaleFactor); // Draw the square
+            ctx.fillRect(x, y, this.size/viewport.scaleFactor, this.size/viewport.scaleFactor); // Draw the square
             if (this.id == 'bot'){
                 ctx.fillText(`Bot ${this.number}`, x, y);
             } else {

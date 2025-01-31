@@ -127,8 +127,8 @@ class Viewport{
             var opponent = opponents[id]
             if (opponent.contains(x,y) && !Object.hasOwn(this.pointColours, strCoords)){
                 this.pointColours[strCoords] = opponent.color;
-                opponent.vx = opponent.rnd[Math.floor(Math.random() * 3)];
-                opponent.vy = opponent.rnd[Math.floor(Math.random() * 3)];
+                opponent.vx = opponent.rnd[Math.floor(Math.random() * opponent.rnd.length)];
+                opponent.vy = opponent.rnd[Math.floor(Math.random() * opponent.rnd.length)];
             }
         }
 
