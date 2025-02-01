@@ -12,7 +12,7 @@ class Opponent {
       this.vy = this.rnd[Math.floor(Math.random() * this.rnd.length)];
 
       this.number = 0;
-      this.size = 150;
+      this.size = 50;
     }
 
     update(number){

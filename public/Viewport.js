@@ -108,8 +108,7 @@ class Viewport{
                 var [cx,cy] = this.toCanvas(x,y);
 
                 var colour = this.eatPoints(ctx, square, opponents,x ,y);
-                //this.drawCircle(ctx, cx, cy, (5 + Math.floor(Math.random() * 10))/this.scaleFactor, colour, colour, 1)
-                //this.drawCircle(ctx, cx, cy, 5/this.scaleFactor, colour, colour, 1)
+                //this.drawGrid(colour, x, y);
                 this.drawCircle(ctx, cx, cy, 5/this.scaleFactor, 'black', 'black', 1)
 
             }
@@ -139,5 +138,14 @@ class Viewport{
         }
 
         return colour;
+    }
+
+    drawGrid(colour, x, y){
+        if (colour != 'black'){
+            ctx.fillStyle = colour;
+            var [dx,dy] = this.toCanvas(x-50, y-50);
+            ctx.fillRect(dx, dy, 100/this.scaleFactor,100/this.scaleFactor); // Draw the square
+        }
+
     }
 }

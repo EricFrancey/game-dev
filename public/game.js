@@ -68,7 +68,7 @@ function draw() {
 
     // Draw the grid first
     //grid.draw(ctx, square);
-    viewport.drawPoints(ctx,square, opponents);
+    //viewport.drawPoints(ctx,square, opponents);
     square.draw(ctx, viewport);
 
     // Draw opponents
