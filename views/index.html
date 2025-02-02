@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Keyboard Controlled Square with Reversed Scrolling Grid</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+
+        #joystick {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px solid #333;
+            border-radius: 50%;
+            touch-action: none; /* Prevent default gestures */
+        }
+
+        #joystick-inner {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 0, 0, 0.5);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* * {
+            border: 10px solid rgb(247, 6, 6);
+        } */
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="joystick">
+        <div id="joystick-inner"></div>
+    </div>    
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
+    </script> -->
+
+    <script src="functions.js"></script>
+    <script src="Viewport.js"></script>
+    <script src="Joystick.js"></script>
+    <script src="Square.js"></script>
+    <script src="Opponent.js"></script>
+    <script src="Grid.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
