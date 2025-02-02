@@ -30,15 +30,19 @@ class Opponent {
 
     draw(ctx, viewport) {
 
+        ctx.fillStyle = this.color;
+        if (this.id == 'bot'){
+            ctx.fillText(`Bot ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`, 0, 150 + 30*this.number);
+        } else {
+            ctx.fillText(`Player ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`,0, 150 + 30*this.number);
+        }
+
         if (viewport.contains(this.x,this.y)){
 
             const [x,y] = viewport.toCanvas(this.x,this.y);
-
-            ctx.fillStyle = this.color;
             ctx.fillRect(x, y, this.size/viewport.scaleFactor, this.size/viewport.scaleFactor); // Draw the square
             if (this.id == 'bot'){
                 ctx.fillText(`Bot ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`, x, y);
-                ctx.fillText(`Bot ${this.number}: rendering ${Math.round(this.x)} ${Math.round(this.y)}`, 0, 150 + this.number*30);
             } else {
                 ctx.fillText(`Player ${this.number}`, x, y);
             }
