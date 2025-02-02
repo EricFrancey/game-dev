@@ -52,6 +52,7 @@ function update() {
 
     square.update(keys);
     grid.update(square);
+    viewport.update(keys,square);
     viewport.moveWithSquare(square)
 
     // update opponents
@@ -67,6 +68,7 @@ function draw() {
 
     // Draw the grid first
     //grid.draw(ctx, square);
+    //viewport.drawPoints(ctx,square, opponents);
     square.draw(ctx, viewport);
 
     // Draw opponents
@@ -89,6 +91,11 @@ function draw() {
     ctx.font = '24px Arial';
     ctx.fillStyle = 'black';
     ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
+
+    // draw viewport coords
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
 }
 
 // The game loop
