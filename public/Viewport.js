@@ -82,7 +82,7 @@ class Viewport{
     }
 
     contains(x,y){
-        return((this.left < x < this.left+this.width) && (this.top < y < this.top+this.height))
+        return(this.left < x && x < this.left+this.width && this.top < y && y < this.top+this.height)
     }
 
     drawCircle(ctx, x, y, radius, fill, stroke, strokeWidth) {
