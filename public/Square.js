@@ -29,6 +29,12 @@ class Square {
             Left: 0.1,
             Right: 0.1
         };
+        this.keyTotalXP = {
+            Up: 0,
+            Down: 0,
+            Left: 0,
+            Right: 0
+        };
         
         this.totalXP = 0;
         this.score = 0;
@@ -43,6 +49,7 @@ class Square {
                 this.keyXP[dir] += 1;
                 if (this.keyXP[dir] >= this.keyXPPerLevel[dir]) {
                     this.keyLevels[dir] += 1;
+                    this.keyTotalXP[dir] += this.keyXP[dir];
                     this.keyXP[dir] = 0;
                     this.keyXPPerLevel[dir] *= 1.1;
                 }

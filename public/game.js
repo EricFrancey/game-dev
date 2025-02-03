@@ -73,7 +73,7 @@ function draw() {
     // Draw the grid first
     square.draw(ctx, viewport);
     scoreboard.draw()
-    scoreboard.drawKeyXP(square.keyXP, square.keyXPPerLevel, square.keyLevels)
+    scoreboard.drawKeyXP(square.keyXP, square.keyXPPerLevel, square.keyLevels, square.keyTotalXP)
     // Draw opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
