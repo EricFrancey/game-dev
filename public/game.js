@@ -57,6 +57,7 @@ function update(deltaTime) {
 
     square.update(keys, deltaTime);
     grid.update(square);
+    viewport.update(keys,square);
     viewport.moveWithSquare(square)
 
     // update opponents
@@ -71,6 +72,8 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
     // Draw the grid first
+    //grid.draw(ctx, square);
+    //viewport.drawPoints(ctx,square, opponents);
     square.draw(ctx, viewport);
     scoreboard.draw()
     scoreboard.drawKeyXP(square.keyXP, square.keyXPPerLevel, square.keyLevels, square.keyTotalXP)
@@ -79,6 +82,26 @@ function draw() {
         var id = Object.keys(opponents)[o];
         opponents[id].draw(ctx, viewport);
     }
+
+    // Draw the score overlay
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`Score: ${grid.score}`, 10, 30);
+
+    // draw coordinates
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`X: ${square.x}   Y: ${square.y}`, 10, 60);
+
+    // draw viewport coords
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
+
+    // draw viewport coords
+    ctx.font = '24px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
 }
 
 // function saveGame() {

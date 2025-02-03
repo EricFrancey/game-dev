@@ -83,9 +83,13 @@ class Square {
 
     }
 
+    contains(x,y){
+        return(x > this.x && x < this.x + this.size && y > this.y && y < this.y + this.size);
+    }
+
     draw(ctx, viewport){
         ctx.fillStyle = this.color;
         const [x,y] = viewport.toCanvas(this.x,this.y); 
-        ctx.fillRect(x, y, this.size, this.size); // Draw the square
+        ctx.fillRect(x, y, this.size/viewport.scaleFactor, this.size/viewport.scaleFactor); // Draw the square
     }
 };
