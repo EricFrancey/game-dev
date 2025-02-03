@@ -57,5 +57,12 @@ class Login{
         }
 
     }
+
+    removeEventListeners(){
+        this.welcomeMusicButton.removeEventListeners();
+        this.welcomeNoMusicButton.removeEventListeners();
+        this.playButton.removeEventListeners();
+        this.playAsGuestButton.removeEventListeners();
+    }
     
 }

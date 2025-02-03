@@ -15,9 +15,13 @@ class Button {
       // Draw the button when it's created
       this.draw();
       
+
       // Bind mouse events
-      canvas.addEventListener('click', this.handleClick.bind(this));
-      canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
+      this.boundHandleClick = this.handleClick.bind(this)
+      this.boundHandleMouseMove = this.handleMouseMove.bind(this)
+      canvas.addEventListener('click', this.boundHandleClick);
+      canvas.addEventListener('mousemove', this.boundHandleMouseMove);
+    
     }
 
     // Draw the button
@@ -59,5 +63,10 @@ class Button {
       this.isHovered = mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
       
       this.draw();  // Redraw the button with updated hover state
+    }
+
+    removeEventListeners(){
+        canvas.removeEventListener('click', this.boundHandleClick);
+        canvas.removeEventListener('mousemove', this.boundHandleMouseMove);
     }
   }

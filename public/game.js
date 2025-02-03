@@ -103,11 +103,13 @@ function draw() {
 }
 
 function loginScreen(){
-    if (!login.loggedIn){
+    if (!login.loggedIn && !login.guesting){
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         login.update();
         login.draw();
         requestAnimationFrame(loginScreen);
+    } else {
+        login.removeEventListeners()
     }
 }
 
