@@ -10,6 +10,7 @@ class Button {
       this.clicked = false;
       this.click_x;
       this.click_y;
+      this.frame = 0;
       
       // Draw the button when it's created
       this.draw();
@@ -32,7 +33,7 @@ class Button {
       // Draw button text
       ctx.fillStyle = 'black';
       ctx.font = '20px Arial';
-      ctx.fillText(this.text, this.x + this.width / 2, this.y + this.height / 2);
+      ctx.fillText(this.text, this.x + 10, this.y + this.height / 2);
 
       ctx.closePath();
     }

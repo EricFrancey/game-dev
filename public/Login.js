@@ -1,6 +1,7 @@
 class Login{
     constructor(){
         this.loggedIn = false
+        this.guesting = false
         this.welcomed = false
 
         this.playingMusic = false;
@@ -14,6 +15,11 @@ class Login{
           });
 
         this.playButton = new Button(150, 300, 200, 100, "Play", function() {
+            this.clicked = true
+            var name = prompt("Name")
+        });
+
+        this.playAsGuestButton = new Button(450, 300, 200, 100, "Play as Guest", function() {
             this.clicked = true
         });
     }
@@ -34,12 +40,17 @@ class Login{
         if (this.playButton.clicked){
             this.loggedIn = true;
         }
+
+        if (this.playAsGuestButton.clicked){
+            this.guesting = true;
+        }
     }
 
     draw(){
 
         if (this.welcomed){
             this.playButton.draw()
+            this.playAsGuestButton.draw()
         } else {
             this.welcomeMusicButton.draw()
             this.welcomeNoMusicButton.draw()

@@ -113,7 +113,7 @@ function loginScreen(){
 
 // The game loop
 function gameLoop() {
-    if (login.loggedIn){
+    if (login.loggedIn || login.guesting){
         socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
         update();
         draw();
