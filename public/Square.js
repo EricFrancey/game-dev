@@ -8,16 +8,55 @@ class Square {
         this.color = 'red';
 
         this.bufferzone = 50;
+        
+        this.keyLevels = {
+            Up: 1,
+            Down: 1,
+            Left: 1,
+            Right: 1
+        };
+        
+        this.keyXP = {
+            Up: 0,
+            Down: 0,
+            Left: 0,
+            Right: 0
+        };
+        
+        this.keyXPPerLevel = {
+            Up: 0.1,  // XP required for the first level is 0.1 seconds
+            Down: 0.1,
+            Left: 0.1,
+            Right: 0.1
+        };
+        
+        this.totalXP = 0;
+        this.score = 0;
+        this.lastUpdateTime = 0;
+        this.lastScoreTime = 0;
     }
 
-    update(keys){
+    updatexp(){
+   
+        ["Up", "Down", "Left", "Right"].forEach((dir, i) => {
+            if (this[["w", "s", "a", "d"][i]]) {
+                this.keyXP[dir] += 1;
+                if (this.keyXP[dir] >= this.keyXPPerLevel[dir]) {
+                    this.keyLevels[dir] += 1;
+                    this.keyXP[dir] = 0;
+                    this.keyXPPerLevel[dir] *= 1.1;
+                }
+            }
+        });
+    }
 
-        // Player movement logic
+    update(keys, deltaTime){
+  
         this.w = (keys['w'] || keys['ArrowUp']) ? 1 : 0 
         this.a = (keys['a'] || keys['ArrowLeft']) ? 1: 0
         this.s = (keys['s'] || keys['ArrowDown']) ? 1: 0
         this.d = (keys['d'] || keys['ArrowRight'])? 1:0
-
+        this.updatexp()
         this.vx = this.speed*(this.d - this.a + joystick.dx);
         this.vy = this.speed*(this.s - this.w + joystick.dy);
 
