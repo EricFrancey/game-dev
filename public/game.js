@@ -1,3 +1,6 @@
+
+var music = {"login1" : new Audio('resources/mp3/login screen.mp3'), "login2" :new Audio('resources/mp3/stick.mp3')} ;
+
 // communications
 const socket = io();
 
@@ -21,6 +24,7 @@ square = new Square(canvas);
 grid = new Grid(canvas);
 joystick = new Joystick();
 viewport = new Viewport(canvas);
+login = new Login();
 
 // Event listener for keyboard input
 let keys = {};
@@ -98,13 +102,24 @@ function draw() {
     ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
 }
 
+function loginScreen(){
+    if (!login.loggedIn){
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        login.update();
+        login.draw();
+        requestAnimationFrame(loginScreen);
+    }
+}
+
 // The game loop
 function gameLoop() {
-    socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
-    update();
-    draw();
+    if (login.loggedIn){
+        socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
+        update();
+        draw();
+    }
     requestAnimationFrame(gameLoop); // Call the game loop again
 }
 
-// Start the game loop
-gameLoop();
+requestAnimationFrame(loginScreen)
+requestAnimationFrame(gameLoop);
