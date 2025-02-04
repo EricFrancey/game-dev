@@ -17,13 +17,17 @@ var opponents = {};
 var opponent1 = new Opponent(0,0, 'bot', 'green');
 var opponent2 = new Opponent(0,0, 'bot', 'blue');
 var opponent3 = new Opponent(0,0, 'bot', 'red');
+opponents['bot1'] = opponent1;
+opponents['bot2'] = opponent2;
+opponents['bot3'] = opponent3;
+
+var landmarks = [];
+var landmark1 = new Landmark("BOX", 1000, 1000, 100, 'blue')
+landmarks.push(landmark1)
 
 let lastUpdateTime = 0;
 let totalTime = 0
 
-opponents['bot1'] = opponent1;
-opponents['bot2'] = opponent2;
-opponents['bot3'] = opponent3;
 square = new Square(canvas);
 scoreboard = new Scoreboard(square)
 grid = new Grid(canvas);
@@ -85,6 +89,11 @@ function draw() {
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
         opponents[id].draw(ctx, viewport);
+    }
+
+    // Draw landmarks
+    for (var i = 0; i < landmarks.length; i++){
+        landmarks[i].draw(viewport);
     }
 
     // Draw the score overlay
