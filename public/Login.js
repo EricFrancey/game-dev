@@ -6,20 +6,24 @@ class Login{
 
         this.playingMusic = false;
 
-        this.welcomeMusicButton = new Button(150, 200, 200, 50, "Play with music", function() {
+        this.welcomeMusicButton = new Button(3*canvas.width/9, canvas.width/18, canvas.width/9, canvas.width/18, "Play with music", function() {
             this.clicked = true;
           });
 
-        this.welcomeNoMusicButton = new Button(450, 200, 200, 50, "Play in silence", function() {
+        this.welcomeMusicButton.addEventListeners()
+
+        this.welcomeNoMusicButton = new Button(5*canvas.width/9, canvas.width/18, canvas.width/9, canvas.width/18, "Play in silence", function() {
             this.clicked = true;
           });
 
-        this.playButton = new Button(150, 300, 200, 100, "Play", function() {
+        this.welcomeNoMusicButton.addEventListeners()
+
+        this.playButton = new Button(3*canvas.width/9, 3*canvas.width/18, canvas.width/9, canvas.width/18, "Play", function() {
             this.clicked = true
             var name = prompt("Name")
         });
 
-        this.playAsGuestButton = new Button(450, 300, 200, 100, "Play as Guest", function() {
+        this.playAsGuestButton = new Button(5*canvas.width/9, 3*canvas.width/18, canvas.width/9, canvas.width/18, "Play as Guest", function() {
             this.clicked = true
         });
     }
@@ -31,6 +35,10 @@ class Login{
             } else {
                 music['login2'].play()
             }
+            this.welcomeNoMusicButton.removeEventListeners()
+            this.welcomeMusicButton.removeEventListeners()
+            this.playButton.addEventListeners()
+            this.playAsGuestButton.addEventListeners()
             this.welcomed = true;
         }
         if (this.welcomeNoMusicButton.clicked){
@@ -58,9 +66,7 @@ class Login{
 
     }
 
-    removeEventListeners(){
-        this.welcomeMusicButton.removeEventListeners();
-        this.welcomeNoMusicButton.removeEventListeners();
+    finish(){
         this.playButton.removeEventListeners();
         this.playAsGuestButton.removeEventListeners();
     }

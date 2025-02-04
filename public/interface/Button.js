@@ -19,8 +19,6 @@ class Button {
       // Bind mouse events
       this.boundHandleClick = this.handleClick.bind(this)
       this.boundHandleMouseMove = this.handleMouseMove.bind(this)
-      canvas.addEventListener('click', this.boundHandleClick);
-      canvas.addEventListener('mousemove', this.boundHandleMouseMove);
     
     }
 
@@ -69,4 +67,9 @@ class Button {
         canvas.removeEventListener('click', this.boundHandleClick);
         canvas.removeEventListener('mousemove', this.boundHandleMouseMove);
     }
+
+    addEventListeners(){
+      canvas.addEventListener('click', this.boundHandleClick);
+      canvas.addEventListener('mousemove', this.boundHandleMouseMove);
+  }
   }

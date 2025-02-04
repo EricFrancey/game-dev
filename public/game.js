@@ -109,7 +109,7 @@ function loginScreen(){
         login.draw();
         requestAnimationFrame(loginScreen);
     } else {
-        login.removeEventListeners()
+        login.finish()
     }
 }
 
