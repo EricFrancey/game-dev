@@ -17,10 +17,15 @@ var opponents = {};
 var opponent1 = new Opponent(0,0, 'bot', 'green');
 var opponent2 = new Opponent(0,0, 'bot', 'blue');
 var opponent3 = new Opponent(0,0, 'bot', 'red');
+
+let lastUpdateTime = 0;
+let totalTime = 0
+
 opponents['bot1'] = opponent1;
 opponents['bot2'] = opponent2;
 opponents['bot3'] = opponent3;
 square = new Square(canvas);
+scoreboard = new Scoreboard(square)
 grid = new Grid(canvas);
 joystick = new Joystick();
 viewport = new Viewport(canvas);
@@ -52,9 +57,9 @@ socket.on('message', (msg) => {
 });
 
 // update game objects
-function update() {
+function update(deltaTime) {
 
-    square.update(keys);
+    square.update(keys, deltaTime);
     grid.update(square);
     viewport.update(keys,square);
     viewport.moveWithSquare(square)
@@ -74,7 +79,8 @@ function draw() {
     //grid.draw(ctx, square);
     //viewport.drawPoints(ctx,square, opponents);
     square.draw(ctx, viewport);
-
+    scoreboard.draw()
+    scoreboard.drawKeyXP(square.keyXP, square.keyXPPerLevel, square.keyLevels, square.keyTotalXP)
     // Draw opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
@@ -114,14 +120,19 @@ function loginScreen(){
 }
 
 // The game loop
-function gameLoop() {
+function gameLoop(timestamp) {
     if (login.loggedIn || login.guesting){
         socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
-        update();
-        draw();
+        if (!lastUpdateTime) lastUpdateTime = timestamp;
+        let deltaTime = timestamp - lastUpdateTime;
+        lastUpdateTime = timestamp;
+        totalTime += deltaTime;
+        update(deltaTime);
+        draw(totalTime);
     }
     requestAnimationFrame(gameLoop); // Call the game loop again
 }
 
 requestAnimationFrame(loginScreen)
 requestAnimationFrame(gameLoop);
+
