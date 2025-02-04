@@ -6,24 +6,24 @@ class Login{
 
         this.playingMusic = false;
 
-        this.welcomeMusicButton = new Button(3*canvas.width/9, canvas.width/18, canvas.width/9, canvas.width/18, "Play with music", function() {
+        this.welcomeMusicButton = new Button(3*canvas.width/9, canvas.height/18, canvas.width/9, canvas.height/18, "Play with music", function() {
             this.clicked = true;
           });
 
         this.welcomeMusicButton.addEventListeners()
 
-        this.welcomeNoMusicButton = new Button(5*canvas.width/9, canvas.width/18, canvas.width/9, canvas.width/18, "Play in silence", function() {
+        this.welcomeNoMusicButton = new Button(5*canvas.width/9, canvas.height/18, canvas.width/9, canvas.height/18, "Play in silence", function() {
             this.clicked = true;
           });
 
         this.welcomeNoMusicButton.addEventListeners()
 
-        this.playButton = new Button(3*canvas.width/9, 3*canvas.width/18, canvas.width/9, canvas.width/18, "Play", function() {
+        this.playButton = new Button(3*canvas.width/9, 3*canvas.height/18, canvas.width/9, canvas.height/18, "Play", function() {
             this.clicked = true
             var name = prompt("Name")
         });
 
-        this.playAsGuestButton = new Button(5*canvas.width/9, 3*canvas.width/18, canvas.width/9, canvas.width/18, "Play as Guest", function() {
+        this.playAsGuestButton = new Button(5*canvas.width/9, 3*canvas.height/18, canvas.width/9, canvas.height/18, "Play as Guest", function() {
             this.clicked = true
         });
     }
@@ -42,7 +42,11 @@ class Login{
             this.welcomed = true;
         }
         if (this.welcomeNoMusicButton.clicked){
-             this.welcomed = true;
+            this.welcomeNoMusicButton.removeEventListeners()
+            this.welcomeMusicButton.removeEventListeners()
+            this.playButton.addEventListeners()
+            this.playAsGuestButton.addEventListeners()
+            this.welcomed = true;
         }
 
         if (this.playButton.clicked){
