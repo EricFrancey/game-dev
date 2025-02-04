@@ -5,26 +5,27 @@ class Login{
         this.welcomed = false
 
         this.playingMusic = false;
+        this.ratio = 1.618;
 
-        this.welcomeMusicButton = new Button(3*canvas.width/9, canvas.height/18, canvas.width/9, canvas.height/18, "Play with music", function() {
+        this.welcomeMusicButton = new Button(3*canvas.width/9, canvas.height/9, this.ratio*canvas.width/9, canvas.height/9, "Play with music", function() {
             this.clicked = true;
           });
 
         this.welcomeMusicButton.addEventListeners()
 
-        this.welcomeNoMusicButton = new Button(5*canvas.width/9, canvas.height/18, canvas.width/9, canvas.height/18, "Play in silence", function() {
+        this.welcomeNoMusicButton = new Button(5*canvas.width/9, canvas.height/9, this.ratio*canvas.width/9, canvas.height/9, "Play in silence", function() {
             this.clicked = true;
           });
 
         this.welcomeNoMusicButton.addEventListeners()
 
-        this.playButton = new Button(3*canvas.width/9, 3*canvas.height/18, canvas.width/9, canvas.height/18, "Play", function() {
+        this.playButton = new Button(3*canvas.width/9, 3*canvas.height/9, this.ratio*canvas.width/9, canvas.height/18, "Login", function() {
             this.clicked = true
             var name = prompt("Name")
             return(name)
         });
 
-        this.playAsGuestButton = new Button(5*canvas.width/9, 3*canvas.height/18, canvas.width/9, canvas.height/18, "Play as Guest", function() {
+        this.playAsGuestButton = new Button(5*canvas.width/9, 3*canvas.height/9, this.ratio*canvas.width/9, canvas.height/18, "Play as Guest", function() {
             this.clicked = true
         });
     }
