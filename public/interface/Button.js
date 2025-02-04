@@ -11,6 +11,7 @@ class Button {
       this.click_x;
       this.click_y;
       this.frame = 0;
+      this.clickResult = null;
       
       // Draw the button when it's created
       this.draw();
@@ -48,7 +49,7 @@ class Button {
       if (mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height) {
         this.click_x = mouseX
         this.click_y = mouseY
-        this.onClick();  // Execute the onClick callback
+        this.clickResult = this.onClick();  // Execute the onClick callback
       }
     }
 
@@ -71,5 +72,5 @@ class Button {
     addEventListeners(){
       canvas.addEventListener('click', this.boundHandleClick);
       canvas.addEventListener('mousemove', this.boundHandleMouseMove);
-  }
+    }
   }

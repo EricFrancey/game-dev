@@ -21,6 +21,7 @@ class Login{
         this.playButton = new Button(3*canvas.width/9, 3*canvas.height/18, canvas.width/9, canvas.height/18, "Play", function() {
             this.clicked = true
             var name = prompt("Name")
+            return(name)
         });
 
         this.playAsGuestButton = new Button(5*canvas.width/9, 3*canvas.height/18, canvas.width/9, canvas.height/18, "Play as Guest", function() {
@@ -50,6 +51,7 @@ class Login{
         }
 
         if (this.playButton.clicked){
+            square.name = this.playButton.clickResult
             this.loggedIn = true;
         }
 

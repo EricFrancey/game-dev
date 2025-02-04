@@ -1,6 +1,7 @@
 // Square properties
 class Square {
     constructor(canvas){
+        this.name = ""
         this.x = canvas.width / 2;
         this.y = canvas.height / 2;
         this.size = 50; // Size of the player square and grid squares
@@ -44,6 +45,7 @@ class Square {
     draw(ctx, viewport){
         ctx.fillStyle = this.color;
         const [x,y] = viewport.toCanvas(this.x,this.y); 
+        ctx.fillText(this.name, x,y)
         ctx.fillRect(x, y, this.size/viewport.scaleFactor, this.size/viewport.scaleFactor); // Draw the square
     }
 };
