@@ -1,5 +1,5 @@
 
-var music = {"login1" : new Audio('resources/mp3/login screen.mp3'), "login2" :new Audio('resources/mp3/stick.mp3')} ;
+var music = {"login1" : new Audio('resources/mp3/login screen.mp3'), "login2" :new Audio('resources/mp3/login screen.mp3')} ;
 
 // communications
 const socket = io();
