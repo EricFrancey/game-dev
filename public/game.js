@@ -14,16 +14,12 @@ canvas.height = window.innerHeight;
 
 // Init game variables
 var opponents = {};
-var opponent1 = new Opponent(0,0, 'bot', 'green');
-var opponent2 = new Opponent(0,0, 'bot', 'blue');
-var opponent3 = new Opponent(0,0, 'bot', 'red');
+var landmarks = [];
+var items = []
 
 let lastUpdateTime = 0;
 let totalTime = 0
 
-opponents['bot1'] = opponent1;
-opponents['bot2'] = opponent2;
-opponents['bot3'] = opponent3;
 square = new Square(canvas);
 scoreboard = new Scoreboard(square)
 grid = new Grid(canvas);
@@ -62,6 +58,9 @@ function update(deltaTime) {
     square.update(keys, deltaTime);
     grid.update(square);
     viewport.update(keys,square);
+
+    landmarks.forEach((element) => element.update(viewport, square));
+
     viewport.moveWithSquare(square)
 
     // update opponents
@@ -69,11 +68,15 @@ function update(deltaTime) {
         var id = Object.keys(opponents)[o];
         opponents[id].update(o+1);
     }
+
+    items.forEach((element) => element.update());
 }
 
 // Draw to screen
 function draw(totalTime) {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+    landmarks.forEach((element) => element.draw(viewport, square));
 
     // Draw the grid first
     //grid.draw(ctx, square);
@@ -86,6 +89,8 @@ function draw(totalTime) {
         var id = Object.keys(opponents)[o];
         opponents[id].draw(ctx, viewport);
     }
+
+    items.forEach((element) => element.draw(viewport, square));
 
     // Draw the score overlay
     ctx.font = '24px Arial';
@@ -198,6 +203,27 @@ function gameLoop(timestamp) {
     }
     requestAnimationFrame(gameLoop); // Call the game loop again
 }
+
+var demo = false;
+if (demo){
+    var opponent1 = new Opponent(0,0, 'bot', 'green');
+    var opponent2 = new Opponent(0,0, 'bot', 'blue');
+    var opponent3 = new Opponent(0,0, 'bot', 'red');
+    opponents['bot1'] = opponent1;
+    opponents['bot2'] = opponent2;
+    opponents['bot3'] = opponent3;
+
+    landmarks.push(new Spot("Landmark", 1800, 1000, "rgba(0, 0, 240, 1)", 1000))
+    landmarks.push(new Spot("Landmark", 1000, 1000, "rgba(240, 0, 0, 1)", 1000))
+    landmarks.push(new Spot("Landmark", 200, 1000, "rgba(0, 240, 0, 1)", 1000))
+    landmarks.push(new WarpVoid("warp", 2000,2000, 3000, 3000))
+
+    tether = new Tether(500)
+    tether.tether(square, landmarks[0])
+    items.push(tether);
+}
+
+
 
 requestAnimationFrame(loginScreen)
 requestAnimationFrame(gameLoop);
