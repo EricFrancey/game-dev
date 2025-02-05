@@ -17,7 +17,7 @@ class Square {
             Right: 1
         };
         
-        this.keyXP = {
+        this.keyXPThisLevel = {
             Up: 0,
             Down: 0,
             Left: 0,
@@ -36,7 +36,12 @@ class Square {
             Left: 0,
             Right: 0
         };
-        
+        this.keyLifetimeTotalXP = {
+            Up: 0,
+            Down: 0,
+            Left: 0,
+            Right: 0
+        };
         this.totalXP = 0;
         this.score = 0;
         this.lastUpdateTime = 0;
@@ -47,11 +52,12 @@ class Square {
    
         ["Up", "Down", "Left", "Right"].forEach((dir, i) => {
             if (this[["w", "s", "a", "d"][i]]) {
-                this.keyXP[dir] += 1;
-                if (this.keyXP[dir] >= this.keyXPPerLevel[dir]) {
+                this.keyXPThisLevel[dir] += 1;
+                this.keyLifetimeTotalXP[dir] += 1;
+                if (this.keyXPThisLevel[dir] >= this.keyXPPerLevel[dir]) {
                     this.keyLevels[dir] += 1;
-                    this.keyTotalXP[dir] += this.keyXP[dir];
-                    this.keyXP[dir] = 0;
+                    this.keyTotalXP[dir] += this.keyXPThisLevel[dir];
+                    this.keyXPThisLevel[dir] = 0;
                     this.keyXPPerLevel[dir] *= 1.1;
                 }
             }
