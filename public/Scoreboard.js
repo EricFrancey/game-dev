@@ -25,20 +25,5 @@ class Scoreboard {
     }
 
     draw() {
-
-        // Draw the score overlay
-        ctx.font = '24px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText(`Score: ${grid.score}`, 10, 30);
-
-        // draw coordinates
-        ctx.font = '24px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText(`X: ${square.x}   Y: ${square.y}`, 10, 60);
-
-        // draw viewport coords
-        ctx.font = '24px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
     }
 }

@@ -31,10 +31,13 @@ class Opponent {
     draw(ctx, viewport) {
 
         ctx.fillStyle = this.color;
-        if (this.id == 'bot'){
-            ctx.fillText(`Bot ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`, 0, 150 + 30*this.number);
-        } else {
-            ctx.fillText(`Player ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`,0, 150 + 30*this.number);
+
+        if (debug){
+            if (this.id == 'bot'){
+                ctx.fillText(`Bot ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`, 0, 150 + 30*this.number);
+            } else {
+                ctx.fillText(`Player ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`,0, 150 + 30*this.number);
+            }
         }
 
         if (viewport.contains(this.x,this.y)){

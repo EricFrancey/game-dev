@@ -1,3 +1,4 @@
+var debug = false;
 
 var music = {"login1" : new Audio('resources/mp3/login screen.mp3'), "login2" :new Audio('resources/mp3/login screen.mp3')} ;
 
@@ -92,25 +93,28 @@ function draw(totalTime) {
 
     items.forEach((element) => element.draw(viewport, square));
 
-    // Draw the score overlay
-    ctx.font = '24px Arial';
-    ctx.fillStyle = 'black';
-    ctx.fillText(`Score: ${grid.score}`, 10, 30);
-
     // draw coordinates
     ctx.font = '24px Arial';
     ctx.fillStyle = 'black';
     ctx.fillText(`X: ${square.x}   Y: ${square.y}`, 10, 60);
 
-    // draw viewport coords
+    // Draw the score overlay
     ctx.font = '24px Arial';
     ctx.fillStyle = 'black';
-    ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
+    ctx.fillText(`Score: ${grid.score}`, 10, 30);
 
-    // draw viewport coords
-    ctx.font = '24px Arial';
-    ctx.fillStyle = 'black';
-    ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
+    if (debug){
+
+        // draw viewport coords
+        ctx.font = '24px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
+
+        // draw keys coords
+        ctx.font = '24px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
+    }
 }
 
 function loginScreen(){
