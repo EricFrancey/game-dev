@@ -22,8 +22,11 @@ opponents['bot2'] = opponent2;
 opponents['bot3'] = opponent3;
 
 var landmarks = [];
-var landmark1 = new Landmark("BOX", 1000, 1000, 100, 'blue')
-landmarks.push(landmark1)
+
+landmarks.push(new Spot("Landmark", 1800, 1000, "rgba(0, 0, 240, 1)", 1000))
+landmarks.push(new Spot("Landmark", 1000, 1000, "rgba(240, 0, 0, 1)", 1000))
+landmarks.push(new Spot("Landmark", 200, 1000, "rgba(0, 240, 0, 1)", 1000))
+landmarks.push(new WarpVoid("warp", 2000,2000, 3000, 3000))
 
 let lastUpdateTime = 0;
 let totalTime = 0
@@ -34,6 +37,8 @@ grid = new Grid(canvas);
 joystick = new Joystick();
 viewport = new Viewport(canvas);
 login = new Login();
+tether = new Tether(500)
+tether.tether(square, landmarks[0])
 
 // Event listener for keyboard input
 let keys = {};
@@ -66,18 +71,26 @@ function update(deltaTime) {
     square.update(keys, deltaTime);
     grid.update(square);
     viewport.update(keys,square);
+
+    landmarks.forEach((element) => element.update(viewport, square));
+
     viewport.moveWithSquare(square)
+    //viewport.centerOnSquare(square)
 
     // update opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
         opponents[id].update(o+1);
     }
+
+    tether.update()
 }
 
 // Draw to screen
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+    landmarks.forEach((element) => element.draw(viewport, square));
 
     // Draw the grid first
     //grid.draw(ctx, square);
@@ -91,10 +104,7 @@ function draw() {
         opponents[id].draw(ctx, viewport);
     }
 
-    // Draw landmarks
-    for (var i = 0; i < landmarks.length; i++){
-        landmarks[i].draw(viewport);
-    }
+    tether.draw(viewport, square)
 
     // Draw the score overlay
     ctx.font = '24px Arial';

@@ -76,6 +76,11 @@ class Viewport{
         
     }
 
+    centerOnSquare(square){
+        this.left = square.x - this.width/2;
+        this.top = square.y - this.height/2;
+    }
+
     toCanvas(x,y){
         // takes a position and gets canvas coordinates
         return([(x - this.left)/this.scaleFactor, (y - this.top)/this.scaleFactor]);
