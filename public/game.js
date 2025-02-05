@@ -14,19 +14,8 @@ canvas.height = window.innerHeight;
 
 // Init game variables
 var opponents = {};
-var opponent1 = new Opponent(0,0, 'bot', 'green');
-var opponent2 = new Opponent(0,0, 'bot', 'blue');
-var opponent3 = new Opponent(0,0, 'bot', 'red');
-opponents['bot1'] = opponent1;
-opponents['bot2'] = opponent2;
-opponents['bot3'] = opponent3;
-
 var landmarks = [];
-
-landmarks.push(new Spot("Landmark", 1800, 1000, "rgba(0, 0, 240, 1)", 1000))
-landmarks.push(new Spot("Landmark", 1000, 1000, "rgba(240, 0, 0, 1)", 1000))
-landmarks.push(new Spot("Landmark", 200, 1000, "rgba(0, 240, 0, 1)", 1000))
-landmarks.push(new WarpVoid("warp", 2000,2000, 3000, 3000))
+var items = []
 
 let lastUpdateTime = 0;
 let totalTime = 0
@@ -37,8 +26,6 @@ grid = new Grid(canvas);
 joystick = new Joystick();
 viewport = new Viewport(canvas);
 login = new Login();
-tether = new Tether(500)
-tether.tether(square, landmarks[0])
 
 // Event listener for keyboard input
 let keys = {};
@@ -75,7 +62,6 @@ function update(deltaTime) {
     landmarks.forEach((element) => element.update(viewport, square));
 
     viewport.moveWithSquare(square)
-    //viewport.centerOnSquare(square)
 
     // update opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
@@ -83,7 +69,7 @@ function update(deltaTime) {
         opponents[id].update(o+1);
     }
 
-    tether.update()
+    items.forEach((element) => element.update());
 }
 
 // Draw to screen
@@ -104,7 +90,7 @@ function draw() {
         opponents[id].draw(ctx, viewport);
     }
 
-    tether.draw(viewport, square)
+    items.forEach((element) => element.draw(viewport, square));
 
     // Draw the score overlay
     ctx.font = '24px Arial';
@@ -151,6 +137,27 @@ function gameLoop(timestamp) {
     }
     requestAnimationFrame(gameLoop); // Call the game loop again
 }
+
+var demo = false;
+if (demo){
+    var opponent1 = new Opponent(0,0, 'bot', 'green');
+    var opponent2 = new Opponent(0,0, 'bot', 'blue');
+    var opponent3 = new Opponent(0,0, 'bot', 'red');
+    opponents['bot1'] = opponent1;
+    opponents['bot2'] = opponent2;
+    opponents['bot3'] = opponent3;
+
+    landmarks.push(new Spot("Landmark", 1800, 1000, "rgba(0, 0, 240, 1)", 1000))
+    landmarks.push(new Spot("Landmark", 1000, 1000, "rgba(240, 0, 0, 1)", 1000))
+    landmarks.push(new Spot("Landmark", 200, 1000, "rgba(0, 240, 0, 1)", 1000))
+    landmarks.push(new WarpVoid("warp", 2000,2000, 3000, 3000))
+
+    tether = new Tether(500)
+    tether.tether(square, landmarks[0])
+    items.push(tether);
+}
+
+
 
 requestAnimationFrame(loginScreen)
 requestAnimationFrame(gameLoop);
