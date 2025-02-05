@@ -1,3 +1,6 @@
+
+var music = {"login1" : new Audio('resources/mp3/login screen.mp3'), "login2" :new Audio('resources/mp3/login screen.mp3')} ;
+
 // communications
 const socket = io();
 
@@ -26,6 +29,7 @@ scoreboard = new Scoreboard(square)
 grid = new Grid(canvas);
 joystick = new Joystick();
 viewport = new Viewport(canvas);
+login = new Login();
 
 // Event listener for keyboard input
 let keys = {};
@@ -104,6 +108,18 @@ function draw(totalTime) {
     ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
 }
 
+function loginScreen(){
+    if (!login.loggedIn && !login.guesting){
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        login.update();
+        login.draw();
+        requestAnimationFrame(loginScreen);
+    } else {
+        login.finish()
+    }
+}
+
+// The game loop
 function saveGame() {
     localStorage.setItem("keyLevels", JSON.stringify(square.keyLevels));
     localStorage.setItem("keyXPThisLevel", JSON.stringify(square.keyXPThisLevel));
@@ -171,15 +187,19 @@ function loadGame() {
 }
 
 function gameLoop(timestamp) {
-    if (!lastUpdateTime) lastUpdateTime = timestamp;
-    let deltaTime = timestamp - lastUpdateTime;
-    lastUpdateTime = timestamp;
-    totalTime += deltaTime;
-    update(deltaTime);
-    draw(totalTime);
-    requestAnimationFrame(gameLoop);
+    if (login.loggedIn || login.guesting){
+        socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
+        if (!lastUpdateTime) lastUpdateTime = timestamp;
+        let deltaTime = timestamp - lastUpdateTime;
+        lastUpdateTime = timestamp;
+        totalTime += deltaTime;
+        update(deltaTime);
+        draw(totalTime);
+    }
+    requestAnimationFrame(gameLoop); // Call the game loop again
 }
 
+requestAnimationFrame(loginScreen)
 requestAnimationFrame(gameLoop);
 
 window.onload = function () {
