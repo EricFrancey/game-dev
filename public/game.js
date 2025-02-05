@@ -68,7 +68,7 @@ function update(deltaTime) {
 }
 
 // Draw to screen
-function draw() {
+function draw(totalTime) {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
     // Draw the grid first
@@ -76,7 +76,7 @@ function draw() {
     //viewport.drawPoints(ctx,square, opponents);
     square.draw(ctx, viewport);
     scoreboard.draw()
-    scoreboard.drawKeyXP(square.keyXP, square.keyXPPerLevel, square.keyLevels, square.keyTotalXP)
+    scoreboard.drawKeyXP(square.keyXPThisLevel, square.keyXPPerLevel, square.keyLevels, square.keyLifetimeTotalXP)
     // Draw opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
@@ -104,19 +104,73 @@ function draw() {
     ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
 }
 
-// function saveGame() {
-//     localStorage.setItem("gameData", JSON.stringify(totalTime));
-// }
+function saveGame() {
+    localStorage.setItem("keyLevels", JSON.stringify(square.keyLevels));
+    localStorage.setItem("keyXPThisLevel", JSON.stringify(square.keyXPThisLevel));
+    localStorage.setItem("keyTotalXP", JSON.stringify(square.keyTotalXP));
+    localStorage.setItem("keyXPPerLevel", JSON.stringify(square.keyXPPerLevel));
+    localStorage.setItem("keyLifetimeTotalXP", JSON.stringify(square.keyLifetimeTotalXP));
+}
 
-// function loadGame() {
-//     let savedData = localStorage.getItem("gameData");
-//     if (savedData) {
-//         totalTime = JSON.parse(savedData);
-//     }
-// }
-// The game loop
+function loadGame() {
+    if (localStorage.getItem("keyLevels")) {
+        square.keyLevels = JSON.parse(localStorage.getItem("keyLevels"));
+    } else {
+        square.keyLevels = {
+            Up: 0,
+            Down: 0,
+            Left: 0,
+            Right: 0
+        }
+        localStorage.setItem("keyLevels", JSON.stringify(square.keyLevels));
+    }
+    if (localStorage.getItem("keyTotalXP")) {
+        square.keyTotalXP = JSON.parse(localStorage.getItem("keyTotalXP"));
+    } else {
+        square.keyTotalXP = {
+            Up: 0,
+            Down: 0,
+            Left: 0,
+            Right: 0
+        }
+        localStorage.setItem("keyTotalXP", JSON.stringify(square.keyTotalXP));
+    }
+    if (localStorage.getItem("keyXPPerLevel")) {
+        square.keyXPPerLevel = JSON.parse(localStorage.getItem("keyXPPerLevel"));
+    } else { 
+        square.keyXPPerLevel = {
+            Up: 0.1,
+            Down: 0.1,
+            Left: 0.1,
+            Right: 0.1
+        }
+        localStorage.setItem("keyXPPerLevel", JSON.stringify(square.keyXPPerLevel));
+    }
+    if (localStorage.getItem("keyXPThisLevel")) {
+        square.keyXPThisLevel = JSON.parse(localStorage.getItem("keyXPThisLevel"));
+    } else {
+        square.keyXPThisLevel = {
+            Up: 0,
+            Down: 0,
+            Left: 0,
+            Right: 0
+        }
+        localStorage.setItem("keyXPThisLevel", JSON.stringify(square.keyXPThisLevel));
+    }
+    if (localStorage.getItem("keyLifetimeTotalXP")) {
+        square.keyLifetimeTotalXP = JSON.parse(localStorage.getItem("keyLifetimeTotalXP"));
+    } else {
+        square.keyLifetimeTotalXP = {
+            Up: 0,
+            Down: 0,
+            Left: 0,
+            Right: 0
+        }
+        localStorage.setItem("keyLifetimeTotalXP", JSON.stringify(square.keyLifetimeTotalXP));
+    }
+}
+
 function gameLoop(timestamp) {
-
     if (!lastUpdateTime) lastUpdateTime = timestamp;
     let deltaTime = timestamp - lastUpdateTime;
     lastUpdateTime = timestamp;
@@ -125,6 +179,12 @@ function gameLoop(timestamp) {
     draw(totalTime);
     requestAnimationFrame(gameLoop);
 }
+
 requestAnimationFrame(gameLoop);
 
-// window.addEventListener("beforeunload", saveGame);
+window.onload = function () {
+    loadGame();
+};
+
+window.addEventListener("beforeunload", saveGame);
+
