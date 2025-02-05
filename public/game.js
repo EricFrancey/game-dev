@@ -42,11 +42,12 @@ window.addEventListener('keyup', (e) => {
 // communications
 socket.on('message', (msg) => {
 
-    var [id, x, y, color] = parseMsg(msg);
+    var [id, x, y, color, name] = parseMsg(msg);
     if (Object.hasOwn(opponents, id)){
         opponents[id].x = parseInt(x);
         opponents[id].y = parseInt(y);
         opponents[id].color = color;
+        opponents[id].name = name
     } else {
         opponents[id] = new Opponent(x,y, 'player', color);
     }
@@ -96,7 +97,7 @@ function draw(totalTime) {
     // draw coordinates
     ctx.font = '24px Arial';
     ctx.fillStyle = 'black';
-    ctx.fillText(`X: ${square.x}   Y: ${square.y}`, 10, 60);
+    ctx.fillText(`X: ${Math.round(square.x)}   Y: ${Math.round(square.y)}`, 10, 60);
 
     // Draw the score overlay
     ctx.font = '24px Arial';
@@ -197,7 +198,7 @@ function loadGame() {
 
 function gameLoop(timestamp) {
     if (login.loggedIn || login.guesting){
-        socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString());
+        socket.emit('message', square.x.toString() + " " + square.y.toString() + " " + square.color.toString() + " " + square.name);
         if (!lastUpdateTime) lastUpdateTime = timestamp;
         let deltaTime = timestamp - lastUpdateTime;
         lastUpdateTime = timestamp;
@@ -217,14 +218,19 @@ if (demo){
     opponents['bot2'] = opponent2;
     opponents['bot3'] = opponent3;
 
-    landmarks.push(new Spot("Landmark", 1800, 1000, "rgba(0, 0, 240, 1)", 1000))
-    landmarks.push(new Spot("Landmark", 1000, 1000, "rgba(240, 0, 0, 1)", 1000))
-    landmarks.push(new Spot("Landmark", 200, 1000, "rgba(0, 240, 0, 1)", 1000))
-    landmarks.push(new WarpVoid("warp", 2000,2000, 3000, 3000))
+    // landmarks.push(new Spot("Landmark", 1800, 1000, "rgba(0, 0, 240, 1)", 1000))
+    // landmarks.push(new Spot("Landmark", 1000, 1000, "rgba(240, 0, 0, 1)", 1000))
+    // landmarks.push(new Spot("Landmark", 200, 1000, "rgba(0, 240, 0, 1)", 1000))
+    // landmarks.push(new WarpVoid("warp", 2000,2000, 3000, 3000))
 
-    tether = new Tether(500)
-    tether.tether(square, landmarks[0])
-    items.push(tether);
+    // landmarks.push(new WarpVoid("warp", 2000,2000, 1000000, 1000000))
+    // landmarks.push(new WarpVoid("warp", 1000500, 1000500, 1000000000, 1000000000))
+    // landmarks.push(new WarpVoid("warp", 1000000500, 1000000500, 1000000000000, 1000000000000))
+
+    items.push(new Tether(5000), new Tether(5000), new Tether(5000));
+    items[0].tether(square, opponent1)
+    items[1].tether(square, opponent2)
+    items[2].tether(square, opponent3)
 }
 
 

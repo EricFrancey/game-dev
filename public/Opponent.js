@@ -4,6 +4,7 @@ class Opponent {
       this.y = y;
       this.id = id;
       this.color = color;
+      this.name = "bot"
 
       //this.rnd = [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8, -0.1, -0.2, -0.4, -0.8, -1.6, -3.2, -6.4, -12.8];
       this.rnd = [0.1, 0.2, 0.4, 0.8, -0.1, -0.2, -0.4, -0.8];
@@ -47,7 +48,7 @@ class Opponent {
             if (this.id == 'bot'){
                 ctx.fillText(`Bot ${this.number}:${Math.round(this.x)} ${Math.round(this.y)}`, x, y);
             } else {
-                ctx.fillText(`Player ${this.number}`, x, y);
+                ctx.fillText(`${this.name}`, x, y);
             }
 
         }
