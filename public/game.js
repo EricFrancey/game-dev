@@ -82,7 +82,7 @@ function draw(totalTime) {
 
     // Draw the grid first
     //grid.draw(ctx, square);
-    //viewport.drawPoints(ctx,square, opponents);
+    viewport.drawPoints(ctx,square, opponents);
     square.draw(ctx, viewport);
     scoreboard.draw()
     scoreboard.drawKeyXP(square.keyXPThisLevel, square.keyXPPerLevel, square.keyLevels, square.keyLifetimeTotalXP)
@@ -102,7 +102,7 @@ function draw(totalTime) {
     // Draw the score overlay
     ctx.font = '24px Arial';
     ctx.fillStyle = 'black';
-    ctx.fillText(`Score: ${grid.score}`, 10, 30);
+    ctx.fillText(`Points: ${square.points}`, 10, 30);
 
     if (debug){
 

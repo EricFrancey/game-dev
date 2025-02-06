@@ -4,7 +4,7 @@ class Viewport{
         this.top = 0;
         this.left = 0;
         this.bufferzone = 50;
-        this.zoomLevel = 2;
+        this.zoomLevel = 5;
         this.scaleFactor = Math.sqrt(this.zoomLevel);
         this.width = canvas.width*this.scaleFactor;
         this.height = canvas.height*this.scaleFactor;
@@ -107,14 +107,14 @@ class Viewport{
 
     drawPoints(ctx, square, opponents){
 
-
-        for (var x = this.left - this.left%100; x < this.left + this.width; x = x + 100){
-            for (var y = this.top - this.top%100; y < this.top + this.height; y = y + 100){
+        var spacing  = 1000
+        for (var x = this.left - this.left%spacing; x < this.left + this.width; x = x + spacing){
+            for (var y = this.top - this.top%spacing; y < this.top + this.height; y = y + spacing){
                 var [cx,cy] = this.toCanvas(x,y);
 
                 var colour = this.eatPoints(ctx, square, opponents,x ,y);
                 //this.drawGrid(colour, x, y);
-                this.drawCircle(ctx, cx, cy, 5/this.scaleFactor, 'black', 'black', 1)
+                this.drawCircle(ctx, cx, cy, 5/this.scaleFactor, colour, colour, 1)
 
             }
         }
@@ -124,6 +124,7 @@ class Viewport{
         var strCoords = x.toString() + "," + y.toString()
         if (square.contains(x,y) && !Object.hasOwn(this.pointColours, strCoords)){
             this.pointColours[strCoords] = square.color;
+            square.points++;
         }
 
         for (var o = 0; o < Object.keys(opponents).length; o++){
@@ -139,7 +140,7 @@ class Viewport{
 
         var colour = 'black';
         if(Object.hasOwn(this.pointColours, strCoords)){
-            colour = this.pointColours[strCoords];
+            colour = "rgb(240,240,240)" //this.pointColours[strCoords];
         }
 
         return colour;

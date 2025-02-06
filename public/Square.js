@@ -7,6 +7,7 @@ class Square {
         this.size = 50; // Size of the player square and grid squares
         this.speed = 5;
         this.color = 'red';
+        this.points = 0;
 
         this.bufferzone = 50;
         
