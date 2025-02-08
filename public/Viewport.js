@@ -8,7 +8,7 @@ class Viewport{
         this.scaleFactor = Math.sqrt(this.zoomLevel);
         this.width = canvas.width*this.scaleFactor;
         this.height = canvas.height*this.scaleFactor;
-        this.maxZoomLevel = 10;
+        this.maxZoomLevel = 1000;
         this.zoomed = false;
         this.shrunk = false;
         this.pointColours = {};
@@ -26,13 +26,13 @@ class Viewport{
         // press w and zoom out (=) at the same time
         // -> fall off screen
         // edit: helps to be zoom in close to max
-        if (keys['-']){
+        if (keys['-'] || keys["mousewheel_down"]){
             if (!this.zoomed){
                 var [dx,dy] = this.toCanvas(square.x, square.y)
                 this.width /= this.scaleFactor;
                 this.height /= this.scaleFactor;
                 this.zoomLevel = Math.min(this.maxZoomLevel, this.zoomLevel + 1)
-                this.scaleFactor = Math.sqrt(this.zoomLevel);
+                this.scaleFactor = this.zoomLevel;
                 this.zoomed = true;
                 this.left = square.x - dx*this.scaleFactor;
                 this.top = square.y - dy*this.scaleFactor;
@@ -44,13 +44,13 @@ class Viewport{
             this.zoomed = false;
         }
 
-        if (keys['=']){
+        if (keys['='] || keys["mousewheel_up"]){
             if (!this.shrunk){
                 var [dx,dy] = this.toCanvas(square.x, square.y)
                 this.width /= this.scaleFactor;
                 this.height /= this.scaleFactor;
                 this.zoomLevel = Math.max(1, this.zoomLevel - 1)
-                this.scaleFactor = Math.sqrt(this.zoomLevel);
+                this.scaleFactor = this.zoomLevel;
                 this.shrunk = true;
                 this.left = square.x - dx*this.scaleFactor;
                 this.top = square.y - dy*this.scaleFactor;

@@ -1,4 +1,5 @@
 var debug = false;
+var demo = false;
 
 var music = {"login1" : new Audio('resources/mp3/login screen.mp3'), "login2" :new Audio('resources/mp3/login screen.mp3')} ;
 
@@ -39,6 +40,11 @@ window.addEventListener('keyup', (e) => {
     keys[e.key] = false;
 });
 
+window.addEventListener("wheel", event => {
+    keys["mousewheel_up"] = event.deltaY/Math.abs(event.deltaY) == -1
+    keys["mousewheel_down"] = event.deltaY/Math.abs(event.deltaY) == 1
+});
+
 // communications
 socket.on('message', (msg) => {
 
@@ -64,6 +70,14 @@ function update(deltaTime) {
     landmarks.forEach((element) => element.update(viewport, square));
 
     viewport.moveWithSquare(square)
+    if (square.name == "phone"){
+        viewport.zoomLevel = 1000
+        viewport.maxZoomLevel = 1000
+        viewport.scaleFactor = Math.sqrt(viewport.zoomLevel);
+        viewport.width = canvas.width*viewport.scaleFactor;
+        viewport.height = canvas.height*viewport.scaleFactor;
+        viewport.centerOnSquare(square)
+    }
 
     // update opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
@@ -84,8 +98,10 @@ function draw(totalTime) {
     //grid.draw(ctx, square);
     viewport.drawPoints(ctx,square, opponents);
     square.draw(ctx, viewport);
-    scoreboard.draw()
-    scoreboard.drawKeyXP(square.keyXPThisLevel, square.keyXPPerLevel, square.keyLevels, square.keyLifetimeTotalXP)
+    if (square.name != "phone"){
+        scoreboard.draw()
+        scoreboard.drawKeyXP(square.keyXPThisLevel, square.keyXPPerLevel, square.keyLevels, square.keyLifetimeTotalXP)
+    }
     // Draw opponents
     for (var o = 0; o < Object.keys(opponents).length; o++){
         var id = Object.keys(opponents)[o];
@@ -206,10 +222,12 @@ function gameLoop(timestamp) {
         update(deltaTime);
         draw(totalTime);
     }
+
+    keys["mousewheel_up"] = false
+    keys["mousewheel_down"] = false
     requestAnimationFrame(gameLoop); // Call the game loop again
 }
 
-var demo = false;
 if (demo){
     var opponent1 = new Opponent(0,0, 'bot', 'green');
     var opponent2 = new Opponent(0,0, 'bot', 'blue');
