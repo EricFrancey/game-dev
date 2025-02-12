@@ -74,7 +74,23 @@ function update(deltaTime) {
 // Draw to screen
 function draw(totalTime) {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-
+    const starCount = 100;
+    let backgroundOffset = 0;
+    const stars = Array.from({ length: starCount }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 1
+    }));
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+                // Draw stars
+                stars.forEach((star) => {
+                    ctx.fillStyle = "white";
+                    ctx.beginPath();
+                    ctx.arc(star.x, (star.y + backgroundOffset) % canvas.height, star.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
     // Draw the grid first
     //grid.draw(ctx, square);
     //viewport.drawPoints(ctx,square, opponents);
@@ -92,20 +108,20 @@ function draw(totalTime) {
     ctx.fillStyle = 'black';
     ctx.fillText(`Score: ${grid.score}`, 10, 30);
 
-    // draw coordinates
-    ctx.font = '24px Arial';
-    ctx.fillStyle = 'black';
-    ctx.fillText(`X: ${square.x}   Y: ${square.y}`, 10, 60);
+    // // draw coordinates
+    // ctx.font = '24px Arial';
+    // ctx.fillStyle = 'black';
+    // ctx.fillText(`X: ${square.x}   Y: ${square.y}`, 10, 60);
 
-    // draw viewport coords
-    ctx.font = '24px Arial';
-    ctx.fillStyle = 'black';
-    ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
+    // // draw viewport coords
+    // ctx.font = '24px Arial';
+    // ctx.fillStyle = 'black';
+    // ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
 
-    // draw viewport coords
-    ctx.font = '24px Arial';
-    ctx.fillStyle = 'black';
-    ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
+    // // draw viewport coords
+    // ctx.font = '24px Arial';
+    // ctx.fillStyle = 'black';
+    // ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
 }
 
 function loginScreen(){
@@ -202,9 +218,9 @@ function gameLoop(timestamp) {
 requestAnimationFrame(loginScreen)
 requestAnimationFrame(gameLoop);
 
-window.onload = function () {
-    loadGame();
-};
+// window.onload = function () {
+//     loadGame();
+// };
 
-window.addEventListener("beforeunload", saveGame);
+// window.addEventListener("beforeunload", saveGame);
 
