@@ -1,4 +1,3 @@
-var debug = false;
 var demo = false;
 
 var music = {"login1" : new Audio('resources/mp3/login screen.mp3'), "login2" :new Audio('resources/mp3/login screen.mp3')} ;
@@ -28,6 +27,7 @@ grid = new Grid(canvas);
 joystick = new Joystick();
 viewport = new Viewport(canvas);
 login = new Login();
+debug = new Debug();
 
 // Event listener for keyboard input
 let keys = {};
@@ -66,7 +66,7 @@ function update(deltaTime) {
     square.update(keys, deltaTime);
     grid.update(square);
     viewport.update(keys,square);
-
+    debug.update(keys);
     landmarks.forEach((element) => element.update(viewport, square));
 
     viewport.moveWithSquare(square)
@@ -120,17 +120,8 @@ function draw(totalTime) {
     ctx.fillStyle = 'black';
     ctx.fillText(`Points: ${square.points}`, 10, 30);
 
-    if (debug){
-
-        // draw viewport coords
-        ctx.font = '24px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText(`v: ${JSON.stringify(viewport)}`, 10, 90);
-
-        // draw keys coords
-        ctx.font = '24px Arial';
-        ctx.fillStyle = 'black';
-        ctx.fillText(`k: ${JSON.stringify(keys)}`, 10, 120);
+    if (debug.debug){
+        debug.draw(viewport, keys)
     }
 }
 
