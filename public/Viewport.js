@@ -12,6 +12,7 @@ class Viewport{
         this.zoomed = false;
         this.shrunk = false;
         this.pointColours = {};
+        this.pointOffset = 100;
     }
 
     update(keys, square){
@@ -112,9 +113,11 @@ class Viewport{
             for (var y = this.top - this.top%spacing; y < this.top + this.height; y = y + spacing){
                 var [cx,cy] = this.toCanvas(x,y);
 
-                var colour = this.eatPoints(ctx, square, opponents,x ,y);
+                var colour = "black"//this.eatPoints(ctx, square, opponents,x ,y);
                 //this.drawGrid(colour, x, y);
-                this.drawCircle(ctx, cx, cy, 5/this.scaleFactor, colour, colour, 1)
+                this.atomShaker(x,y, square);
+                //this.skyscraperTops(x,y, square);
+                //this.drawCircle(ctx, cx, cy, 5/this.scaleFactor, 'red', 'red', 1)
 
             }
         }
@@ -153,5 +156,53 @@ class Viewport{
             ctx.fillRect(dx, dy, 100/this.scaleFactor,100/this.scaleFactor); // Draw the square
         }
 
+    }
+
+    atomShaker(x,y, square){
+
+        // a vector pointing from the point to the square
+        var radius = 100;
+        var outerRadius = 10000;
+        var radiationStrength = 3;
+        var vector = {x : square.x-x, y:square.y-y}
+        var dist = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y,2));
+        vector.x = vector.x/dist
+        vector.y = vector.y/dist
+        var [out_x, out_y] = this.toCanvas(x,y);
+
+        if (dist < radius){
+            this.drawCircle(ctx, out_x, out_y, 5*((radius - dist)/radius)*(1 + 5/this.scaleFactor), 'red', 'red', 1);
+        } else if ((dist >= radius) && (dist < outerRadius)) {
+            [out_x, out_y] = this.toCanvas(x + ((dist - radius)/radius)*(radiationStrength/2 - Math.floor(Math.random() * radiationStrength)),
+                                           y + ((dist - radius)/radius)*(radiationStrength/2 - Math.floor(Math.random() * radiationStrength)));
+            this.drawCircle(ctx, out_x,out_y, 5/this.scaleFactor, 'black', 'black', 1);
+        }
+        
+    }
+
+    skyscraperTops(x,y, square){
+
+        // a vector pointing from the point to the square
+        var vector = {x : square.x-x, y:square.y-y}
+        var dist = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y,2));
+        vector.x = vector.x/dist
+        vector.y = vector.y/dist
+
+        var out_x = x + vector.x/Math.pow(dist,2)
+        var out_y = y + vector.y/Math.pow(dist,2)
+
+
+        var [cx,cy] = this.toCanvas(out_x,out_y);
+        
+        ctx.beginPath(); // Start a new path
+        const [x1, y1] = this.toCanvas(square.x, square.y)
+        const [x2, y2] = this.toCanvas(x, y)
+        ctx.moveTo(x2, y2);
+        ctx.lineTo((x2+x1)/2, (y2+y1)/2);
+        ctx.lineWidth = 3
+        ctx.strokeStyle = "rgba(0, 0, 0)";
+        ctx.stroke(); // Render the path
+
+        this.drawCircle(ctx, cx, cy, 5/this.scaleFactor, 'red', 'red', 1);
     }
 }
