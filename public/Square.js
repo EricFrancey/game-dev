@@ -85,9 +85,6 @@ class Square {
         if (keys['5']) this.color ='purple';
         if (keys['6']) this.color ='orange';
         if (keys['7']) this.color ='magenta';
-        if (keys['8']) this.color ='cyan';
-        if (keys['9']) this.color ='white';
-        if (keys['10']) this.color ='gray';
 
     }
 
